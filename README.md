@@ -1,398 +1,253 @@
-# 🎓 STC Student Portal
+# STC Student Portal
 
-> A modern, highly optimized single-page React portal designed for students appearing for placement drives.
+A modern, highly optimized single-page React portal designed for students appearing for placement drives.
 
-**STC Student Portal** brings placement preparation resources into one centralized platform, combining verified company placement experiences, round-by-round interview information, mock Online Assessment practice, placement analytics, and an administrative management center.
-
----
-
-## 📌 Overview
-
-Preparing for campus placements often requires students to collect information about companies, eligibility criteria, CTC, interview rounds, Online Assessments, and previous placement experiences.
-
-The **STC Student Portal** provides a centralized platform where this placement-related information can be accessed and managed through a modern single-page application.
-
-The platform consists of two primary sides:
-
-* **Student-facing placement and preparation features**
-* **Administrator controls for managing portal content**
-
-The application is built with a strong focus on performance through a **four-layer caching architecture**, designed to provide fast navigation, reduce unnecessary Supabase reads, and support offline accessibility.
+The platform combines placement analytics, verified placement reports, mock online assessment practice, and an administrative control center into a single student-focused portal.
 
 ---
 
-# ✨ Features
+## Overview
 
-## 📊 Interactive Dashboard
+The STC Student Portal provides students with a centralized platform to explore placement-related information, review experiences shared by placed seniors, practice online assessment questions, and access relevant placement data efficiently.
 
-The dashboard provides students with an overview of placement-related information through dynamic data and analytics.
+The application also includes an administrative interface for managing placement reports, companies, mock questions, and admin authorizations.
 
-### Includes
+---
 
-* Dynamic placement analytics
+## Key Features
+
+### Interactive Dashboard
+
+The dashboard provides:
+
+* Dynamic analytics
 * Recruiter statistics
 * Tier-based company distribution
 * Real-time news ticker
-* Centralized placement information
 
-The dashboard acts as the primary entry point for students accessing the portal.
+This gives students a centralized view of placement-related information.
 
----
+### Verified Placement Reports
 
-## 🏢 Verified Placement Reports
+Students can access detailed placement reports submitted by placed seniors.
 
-The portal provides detailed placement experiences submitted by placed seniors and reviewed by administrators.
+Each report can contain:
 
-Instead of providing only basic company information, placement reports contain a structured breakdown of the recruitment process.
-
-### Report Information
-
-Depending on the report, students can access:
-
-* Company information
-* CTC
+* Interview rounds
+* CTC information
 * Eligibility criteria
-* Number of interview rounds
-* Round-by-round interview logs
-* Interview experiences
-* Placement-related details
+* Placement experience details
 
-### Verification Flow
+Submitted reports are reviewed by administrators before being made available.
 
-```text
-Placement Experience Submitted
-              │
-              ▼
-        Admin Review
-          /       \
-       Reject     Approve
-         │           │
-         ▼           ▼
-    Not Published   Available
-                    to Students
-```
+### Mock OA Practice
 
-This administrative review process allows submitted placement experiences to be reviewed before becoming available to students.
+The portal provides online assessment practice with:
 
----
-
-# 🧠 Mock Online Assessment Practice
-
-The portal includes a dedicated **Mock OA Practice** feature for placement preparation.
-
-Students can practice Online Assessment questions and receive immediate results.
-
-### Features
-
-* Online Assessment questions
-* Interactive question practice
+* Real online assessment questions
 * Instant evaluation
 * Feedback
 * Answer revelation
-* Cached question bank
 
-The question system is integrated with the application's multi-layer caching architecture to provide fast access to previously loaded questions.
+This allows students to practice and evaluate their performance.
 
----
+### Admin Control Center
 
-# 🛠️ Admin Control Center
+Administrators can manage important portal content through the admin panel.
 
-The **Admin Control Center** provides administrative functionality for managing portal content.
+Available controls include:
 
-Administrators can:
+* Approving placement reports
+* Rejecting placement reports
+* Adding companies
+* Submitting new mock questions
+* Managing admin authorizations
 
-### Placement Reports
+### Premium User Interface
 
-* Review submitted reports
-* Approve reports
-* Reject reports
+The interface focuses on a modern and polished visual experience with:
 
-### Companies
-
-* Add companies
-* Maintain company-related information
-
-### Mock OA
-
-* Submit new mock questions
-* Manage the question content used for practice
-
-### Administrator Authorization
-
-* Manage administrator authorizations
-
-The administrative functionality provides centralized control over the information displayed to students.
-
----
-
-# 🎨 Premium User Interface
-
-The portal uses a modern visual design rather than a traditional static portal interface.
-
-### Design Features
-
-* Dark mode
-* Light mode
+* Custom dark and light modes
 * Premium typography
 * Glassmorphism card layouts
 * Subtle animations
-* Modern dashboard presentation
-* Interactive placement-focused interface
-
-The interface is designed to keep placement information organized while maintaining a polished visual experience.
 
 ---
 
-# ⚡ Four-Layer Caching Architecture
+# Caching Architecture
 
-Performance is a core part of the application's architecture.
-
-The portal uses **four caching layers** between the application and the Supabase backend.
+The application uses a four-layer caching architecture designed to reduce unnecessary data requests and improve navigation performance.
 
 ```text
-┌─────────────────────────────┐
-│      React Application      │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│ Layer 1                     │
-│ Zustand Memory Cache        │
-└──────────────┬──────────────┘
-               │ Cache Miss
-               ▼
-┌─────────────────────────────┐
-│ Layer 2                     │
-│ localStorage Cache          │
-└──────────────┬──────────────┘
-               │ Cache Miss
-               ▼
-┌─────────────────────────────┐
-│ Layer 3                     │
-│ Service Worker Cache        │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│ Layer 4                     │
-│ Supabase Backend            │
-│ Source of Truth             │
-└─────────────────────────────┘
+                    STC Student Portal
+                           |
+                           v
+                  Layer 1: Zustand
+                  In-Memory Cache
+                           |
+                           v
+                 Layer 2: localStorage
+                    Local Cache
+                           |
+                           v
+                Layer 3: Service Worker
+                 Progressive Cache
+                           |
+                           v
+                Layer 4: Supabase
+                  Backend / Source
+                    of Truth
 ```
 
-The four layers are designed to provide:
+## Layer 1 — Zustand
 
-* Fast page and data access
-* Reduced repeated Supabase read calls
-* Better navigation performance
-* Offline accessibility for cached resources
-* Persistent local data between page refreshes
+Zustand acts as the in-memory cache.
+
+Its purpose is to provide instant navigation between screens during the same browser session.
+
+**Technology:** Zustand
 
 ---
 
-## 1️⃣ Layer 1 — Zustand Memory Cache
+## Layer 2 — localStorage
 
-The first caching layer uses **Zustand**.
+The second layer stores application data locally using browser `localStorage`.
 
-This is an in-memory cache available while the application is running.
-
-### Purpose
-
-* Instant access to already-loaded data
-* Fast navigation between screens
-* Avoid repeated data retrieval during the same browser session
-* Centralized application state
-
-The Zustand store is located at:
-
-```text
-src/store/portalStore.js
-```
-
----
-
-## 2️⃣ Layer 2 — localStorage Cache
-
-The second layer uses the browser's **localStorage**.
-
-The application stores cached data locally, including:
+It provides:
 
 * Full company directories
 * Placement reports
-* Mock OA questions
+* Mock questions
+* Infinite TTL local caching
+* Automatic invalidation on schema/version mismatch
 
-The local cache uses a schema/version mechanism.
-
-When a schema or version mismatch occurs, the existing cached data can be invalidated so that the application can obtain updated data.
-
-The local cache implementation is located at:
-
-```text
-src/lib/localCache.js
-```
+This reduces the need to repeatedly retrieve the same data.
 
 ---
 
-## 3️⃣ Layer 3 — Service Worker
+## Layer 3 — Service Worker
 
-The third layer uses a **Service Worker** to intercept network requests and serve cached resources.
+The service worker provides progressive caching by intercepting network requests.
 
-The Service Worker follows a **stale-while-revalidate** approach.
+It uses a stale-while-revalidate approach:
 
-Conceptually:
+1. Cached resources can be served immediately.
+2. The service worker requests updated resources in the background.
+3. The cache can then be synchronized with newer resources.
 
-```text
-Network Request
-       │
-       ▼
-Cached Resource Available?
-      / \
-    Yes  No
-     │    │
-     ▼    ▼
- Return  Network
- Cached   Request
- Resource    │
-             ▼
-       Update Cache
-```
-
-The Service Worker is located at:
-
-```text
-public/sw.js
-```
-
-This layer helps provide cached resource access and offline capability.
+**File:** `public/sw.js`
 
 ---
 
-## 4️⃣ Layer 4 — Supabase Backend
+## Layer 4 — Supabase Backend
 
-**Supabase** acts as the backend and source of truth.
+Supabase acts as the backend and source of truth.
 
 The application requests data from Supabase when:
 
-* Lower cache layers do not contain the required data
-* Cache invalidation requires fresh data
+* Lower cache levels do not contain the required data
+* Data invalidation is triggered
 
 Supabase provides:
 
 * PostgreSQL database
-* Authentication
-* Backend data access
-
-The Supabase client is initialized in:
-
-```text
-src/lib/supabase.js
-```
+* Google OAuth authentication
 
 ---
 
-# 🔄 Data Flow
+# Data Flow
 
-The portal follows a cache-first approach for frequently accessed data.
-
-For example, when accessing company directory data:
+The application follows the following general data retrieval flow:
 
 ```text
-Student requests company data
-             │
-             ▼
-      Zustand Cache?
-        /         \
-      YES          NO
-       │            │
-       ▼            ▼
-  Return Data   localStorage?
-                  /       \
-                YES        NO
-                 │          │
-                 ▼          ▼
-            Return Data   Network
-                              │
-                              ▼
-                          Supabase
-                              │
-                              ▼
-                       Store in Cache
-                              │
-                              ▼
-                         Return Data
+User Request
+     |
+     v
+Zustand Cache
+     |
+     | Cache Miss
+     v
+localStorage
+     |
+     | Cache Miss / Invalid Data
+     v
+Service Worker
+     |
+     | Required Data Not Available
+     v
+Supabase Backend
+     |
+     v
+Updated Data
+     |
+     v
+Application
 ```
 
-The same four-layer caching approach is used for:
-
-* Company directory and statistics
-* Mock OA questions
-* Placement reports
+This layered approach allows frequently accessed information to remain available closer to the application while Supabase remains the backend source of truth.
 
 ---
 
-# 🔐 Authentication
+# Authentication
 
-Authentication is handled using **Supabase Authentication**.
+Authentication is handled through Supabase.
 
-The portal uses:
+**Authentication Provider:**
 
-* Supabase Auth
 * Google OAuth
-* Session handling
 
-Authentication and session-related logic is contained in:
+Authentication-related functionality is implemented through:
 
 ```text
 src/hooks/useAuth.js
 ```
 
----
-
-# 🗄️ Database
-
-The project uses **Supabase PostgreSQL** as its database.
-
-Supabase serves as the persistent backend data source for the portal.
-
-The application communicates with Supabase through its configured client:
+and the Supabase configuration is maintained in:
 
 ```text
 src/lib/supabase.js
 ```
 
-The lower cache layers are used to reduce repeated reads from the backend while Supabase remains the source of truth.
+---
+
+# Database
+
+The application uses Supabase PostgreSQL as its database.
+
+Supabase functions as the backend source of truth for the portal's data.
+
+The application retrieves information from the backend when required after checking the available cache layers.
 
 ---
 
-# 🧩 Technology Stack
+# Technology Stack
 
-| Technology                | Purpose                                   |
-| ------------------------- | ----------------------------------------- |
-| **React 17**              | Frontend single-page application          |
-| **Vanilla CSS inside JS** | Injected layout design                    |
-| **Sass / SCSS**           | Styling and shared styles                 |
-| **Zustand**               | State management and Layer-1 memory cache |
-| **Supabase**              | PostgreSQL database and backend           |
-| **Supabase Auth**         | Authentication                            |
-| **Google OAuth**          | Authentication provider                   |
-| **localStorage**          | Layer-2 persistent cache                  |
-| **Service Worker**        | Layer-3 progressive/network caching       |
-| **Serve**                 | Static Node server                        |
+| Category          | Technology                    |
+| ----------------- | ----------------------------- |
+| Frontend          | React 17                      |
+| Styling           | Vanilla CSS inside JavaScript |
+| Styling Compiler  | Sass                          |
+| State Management  | Zustand                       |
+| Database          | Supabase PostgreSQL           |
+| Authentication    | Supabase Google OAuth         |
+| Progressive Cache | Service Worker                |
+| Local Cache       | localStorage                  |
+| In-Memory Cache   | Zustand                       |
+| Backend           | Supabase                      |
+| Hosting / Serving | Serve                         |
 
 ---
 
-# 📁 Project Structure
+# Project Structure
 
 ```text
 user-code-main/
-│
 ├── public/
 │   ├── index.html
 │   ├── sw.js
 │   └── site.webmanifest
 │
 ├── src/
-│   │
 │   ├── components/
 │   │   └── AdminPanel.jsx
 │   │
@@ -422,23 +277,23 @@ user-code-main/
 
 ---
 
-# 🗂️ Directory Breakdown
+# Directory Breakdown
 
 ## `public/`
 
-Contains the application's public/static resources.
+Contains public application files and the service worker.
 
 ### `index.html`
 
-Main HTML entry point of the React application.
+Main HTML entry point for the React application.
 
 ### `sw.js`
 
-Service Worker responsible for Layer-3 caching.
+Service worker responsible for the Layer-3 progressive caching architecture.
 
 ### `site.webmanifest`
 
-Contains web application manifest metadata.
+Web application manifest file.
 
 ---
 
@@ -448,7 +303,7 @@ Contains reusable application components.
 
 ### `AdminPanel.jsx`
 
-Contains the controls and interface for the administrative management center.
+Provides the administrative control interface.
 
 ---
 
@@ -458,64 +313,51 @@ Contains application-specific React hooks.
 
 ### `useAuth.js`
 
-Handles:
-
-* Authentication checks
-* Session handling
+Handles authentication-related functionality.
 
 ### `useDirectory.js`
 
-Handles:
-
-* Company directory
-* Statistics
-* Four-layer caching
+Handles company directory data.
 
 ### `useQuestions.js`
 
-Handles:
-
-* Mock OA questions
-* Four-layer caching
+Handles mock assessment question data.
 
 ### `useReport.js`
 
-Handles:
-
-* Placement reports
-* Four-layer caching
+Handles placement report data.
 
 ---
 
 ## `src/lib/`
 
-Contains supporting application libraries.
+Contains supporting application utilities and external service configuration.
 
 ### `localCache.js`
 
-Provides the localStorage cache wrapper.
+Handles Layer-2 local caching through `localStorage`.
 
 ### `supabase.js`
 
-Initializes the Supabase database client.
+Contains the Supabase configuration and connection.
 
 ---
 
 ## `src/store/`
 
-Contains global application state.
+Contains application state management.
 
 ### `portalStore.js`
 
-Contains the global Zustand memory store used as the first cache layer.
+Defines the Zustand store used for Layer-1 in-memory caching and application state.
 
 ---
 
-## Main Application
+## Main Application Files
 
 ### `STC_KIET_Portal.jsx`
 
-The main client application component containing the primary UI and sub-components.
+Main React portal application.
 
 ### `index.js`
 
@@ -523,49 +365,32 @@ React application entry point.
 
 ### `index.scss`
 
-Base application styles.
+Main stylesheet.
 
 ### `_common.scss`
 
-Shared SCSS variables.
+Shared Sass styles.
 
 ---
 
-# 📋 Local Development
+# Local Development
 
-## Prerequisites
+## 1. Environment Configuration
 
-The project requires:
-
-* Node.js
-* npm
-* A configured Supabase project
-
----
-
-## 1. Configure Environment Variables
-
-Create a `.env` file in the root directory.
+Create a `.env` file in the project root.
 
 ```env
 REACT_APP_SUPABASE_URL=your_supabase_url
 REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-Example structure:
-
-```env
-REACT_APP_SUPABASE_URL=your_supabase_url
-REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-The `.env` file contains the Supabase configuration used by the application.
+Replace the placeholder values with the corresponding Supabase project credentials.
 
 ---
 
 ## 2. Install Dependencies
 
-From the project root, run:
+Run:
 
 ```bash
 npm install
@@ -581,13 +406,11 @@ Run:
 npm start
 ```
 
-This starts the React application for local development.
-
 ---
 
-## 4. Build for Production
+## 4. Create a Production Build
 
-Create the production build using:
+Run:
 
 ```bash
 npm run build
@@ -595,154 +418,106 @@ npm run build
 
 ---
 
-# 🔒 Environment Configuration
+# Application Architecture
 
-The project uses environment variables for the Supabase configuration.
-
-The environment file is:
+The application is organized around several primary areas:
 
 ```text
-.env
-```
-
-Required variables:
-
-```text
-REACT_APP_SUPABASE_URL
-REACT_APP_SUPABASE_ANON_KEY
-```
-
-The `.env` file should remain outside the committed source code when configured as an ignored environment file.
-
----
-
-# 🧭 Application Architecture
-
-The overall application can be represented as:
-
-```text
-                    STC STUDENT PORTAL
-                           │
-          ┌────────────────┴────────────────┐
-          │                                 │
-          ▼                                 ▼
-   Student Features                  Admin Features
-          │                                 │
-   ┌──────┼───────┐                 ┌───────┼────────┐
-   │      │       │                 │       │        │
-   ▼      ▼       ▼                 ▼       ▼        ▼
-Dashboard Reports  Mock OA        Reports Companies Questions
-   │      │       │                 │       │        │
-   └──────┴───────┘                 └───────┴────────┘
-          │                                 │
-          └──────────────┬──────────────────┘
-                         ▼
-                 Caching Architecture
-                         │
-        ┌────────────────┼────────────────┐
-        ▼                ▼                ▼
-     Zustand        localStorage    Service Worker
-        │                │                │
-        └────────────────┼────────────────┘
-                         ▼
-                    Supabase
-                         │
-                         ▼
-                 PostgreSQL + Auth
+STC Student Portal
+│
+├── Student Dashboard
+│   ├── Analytics
+│   ├── Recruiter Statistics
+│   ├── Company Distribution
+│   └── News Ticker
+│
+├── Placement Reports
+│   ├── Interview Rounds
+│   ├── CTC
+│   └── Eligibility Criteria
+│
+├── Mock OA Practice
+│   ├── Questions
+│   ├── Evaluation
+│   ├── Feedback
+│   └── Answers
+│
+└── Admin Control Center
+    ├── Report Management
+    ├── Company Management
+    ├── Question Management
+    └── Admin Authorization
 ```
 
 ---
 
-# 🎯 Core Objectives
+# Performance Approach
 
-The portal focuses on three major areas:
+The portal uses multiple caching layers to reduce unnecessary backend requests and improve the overall navigation experience.
 
-### 1. Placement Information
-
-Provide structured company and placement information to students.
-
-### 2. Placement Preparation
-
-Provide verified placement experiences and mock Online Assessment practice.
-
-### 3. Content Management
-
-Provide administrators with centralized controls for reviewing and managing placement-related content.
-
----
-
-# 📈 Performance Approach
-
-The application is designed around minimizing unnecessary repeated data retrieval.
-
-Frequently accessed information can be available through the lower caching layers before the application needs to request it from Supabase.
-
-The architecture therefore follows:
+The caching hierarchy is:
 
 ```text
-Fastest
-   │
-   ▼
 Zustand
-   │
-   ▼
+   ↓
 localStorage
-   │
-   ▼
-Service Worker / Network Cache
-   │
-   ▼
+   ↓
+Service Worker
+   ↓
 Supabase
-   │
-   ▼
-Source of Truth
 ```
 
-This four-layer approach is used to support:
+Each layer has a specific responsibility:
 
-* Instant access to cached information
-* Persistent browser-side data
-* Cached network resources
-* Reduced Supabase read calls
-* Offline accessibility
-
----
-
-# 📝 Summary
-
-**STC Student Portal** is a single-page React portal focused on placement-drive preparation.
-
-It combines:
-
-* 📊 Interactive placement analytics
-* 🏢 Company placement information
-* 📝 Verified placement experiences
-* 🎯 Round-by-round interview logs
-* 🧠 Mock Online Assessment practice
-* 🛠️ Administrative management
-* 🔐 Supabase authentication
-* ⚡ Four-layer caching
-* 🎨 Modern dark/light interface
-
-The architecture combines **React, Zustand, localStorage, Service Worker caching, and Supabase** to create a centralized placement portal with a strong focus on fast data access and organized placement information.
+| Layer   | Purpose                                                  |
+| ------- | -------------------------------------------------------- |
+| Layer 1 | Instant in-memory access during the browser session      |
+| Layer 2 | Persistent local caching through localStorage            |
+| Layer 3 | Progressive network-level caching through Service Worker |
+| Layer 4 | Backend data and source of truth through Supabase        |
 
 ---
 
-## 📄 Project Information
+# Core Objectives
+
+The STC Student Portal is designed to provide students with a centralized placement preparation and information platform.
+
+Its primary objectives are:
+
+* Provide placement-related analytics
+* Provide verified placement reports
+* Allow students to practice online assessment questions
+* Provide instant evaluation and feedback
+* Centralize company-related placement information
+* Provide administrative controls for managing portal content
+* Improve navigation through a multi-layer caching architecture
+
+---
+
+# Project Information
 
 **Project:** STC Student Portal
-**Application Type:** Single-Page React Portal
-**Primary Purpose:** Placement Drive Preparation
+
+**Application Type:** Student Placement Portal
+
+**Frontend:** React 17
+
 **Database:** Supabase PostgreSQL
-**Authentication:** Supabase Auth + Google OAuth
+
+**Authentication:** Google OAuth through Supabase
+
 **State Management:** Zustand
-**Caching:** Zustand + localStorage + Service Worker + Supabase
-**Styling:** CSS / SCSS
+
+**Caching:** Zustand, localStorage, Service Worker
+
 **Serving:** Serve
 
 ---
 
-<p align="center">
-  <strong>STC Student Portal</strong><br>
-  Placement Information • Preparation • Management
-</p>
+# Summary
+
+The STC Student Portal brings together placement analytics, verified placement reports, mock OA practice, and administrative management in a single React-based application.
+
+Its four-layer caching architecture combines Zustand, localStorage, Service Worker caching, and Supabase to provide a structured approach to data access and application performance.
+
+The result is a student-focused placement portal with a modern interface, centralized placement information, practice functionality, and dedicated administrative controls.
